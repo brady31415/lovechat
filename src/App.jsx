@@ -12,12 +12,13 @@ import {
 // 🔥 CONFIGURATION FIREBASE
 // Remplace ces valeurs par celles de ton projet Firebase.
 const firebaseConfig = {
-  apiKey: "TON_API_KEY",
-  authDomain: "ton-projet.firebaseapp.com",
-  projectId: "ton-projet",
-  storageBucket: "ton-projet.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "APP_ID",
+  apiKey: "AIzaSyBqLnbumaxTWzIpwLmpGNFOS46OWuQ2f_c",
+  authDomain: "messager-private.firebaseapp.com",
+  projectId: "messager-private",
+  storageBucket: "messager-private.firebasestorage.app",
+  messagingSenderId: "82744627532",
+  appId: "1:82744627532:web:3cd51591eb90e3db03ffe9",
+  measurementId: "G-CR2B03YSBX"
 };
 
 const app = initializeApp(firebaseConfig);
