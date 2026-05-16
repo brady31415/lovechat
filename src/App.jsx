@@ -4,7 +4,8 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+ getRedirectResult,
   signOut,
 } from "firebase/auth";
 
@@ -49,16 +50,12 @@ export default function CoupleChatApp() {
 
   // 🔑 CONNEXION GOOGLE
   const login = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-
-      setUser(result.user);
-
-      console.log("Connecté :", result.user.displayName);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   // 🚪 DÉCONNEXION
   const logout = async () => {
@@ -69,6 +66,16 @@ export default function CoupleChatApp() {
 
   // 📩 RÉCUPÉRATION DES MESSAGES
   useEffect(() => {
+
+    getRedirectResult(auth)
+  .then((result) => {
+    if (result?.user) {
+      setUser(result.user);
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+  });
     const q = query(
       collection(db, "messages"),
       orderBy("createdAt")
