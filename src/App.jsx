@@ -4,8 +4,7 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 
@@ -51,7 +50,12 @@ export default function CoupleChatApp() {
   // 🔑 CONNEXION GOOGLE
   const login = async () => {
   try {
-    await signInWithRedirect(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+
+    setUser(result.user);
+
+    console.log("Connecté :", result.user.displayName);
+
   } catch (error) {
     console.error(error);
   }
@@ -68,17 +72,7 @@ export default function CoupleChatApp() {
   useEffect(() => {
 
   // 🔑 Récupération après redirection Google
-  getRedirectResult(auth)
-    .then((result) => {
-      if (result?.user) {
-        setUser(result.user);
-
-        console.log("Utilisateur connecté :", result.user.displayName);
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+ 
 
   // 📩 Chargement des messages
   const q = query(
