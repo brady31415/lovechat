@@ -6,6 +6,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+  setPersistence,
+browserLocalPersistence,
 } from "firebase/auth";
 
 import {
@@ -50,6 +52,9 @@ export default function CoupleChatApp() {
   // 🔑 CONNEXION GOOGLE
   const login = async () => {
   try {
+
+    await setPersistence(auth, browserLocalPersistence);
+
     const result = await signInWithPopup(auth, provider);
 
     setUser(result.user);
