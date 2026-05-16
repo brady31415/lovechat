@@ -5,7 +5,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithRedirect,
- getRedirectResult,
+  getRedirectResult,
   signOut,
 } from "firebase/auth";
 
@@ -67,31 +67,37 @@ export default function CoupleChatApp() {
   // 📩 RÉCUPÉRATION DES MESSAGES
   useEffect(() => {
 
-    getRedirectResult(auth)
-  .then((result) => {
-    if (result?.user) {
-      setUser(result.user);
-    }
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-    const q = query(
-      collection(db, "messages"),
-      orderBy("createdAt")
-    );
+  // 🔑 Récupération après redirection Google
+  getRedirectResult(auth)
+    .then((result) => {
+      if (result?.user) {
+        setUser(result.user);
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setMessages(data);
+        console.log("Utilisateur connecté :", result.user.displayName);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
     });
 
-    return () => unsubscribe();
-  }, []);
+  // 📩 Chargement des messages
+  const q = query(
+    collection(db, "messages"),
+    orderBy("createdAt")
+  );
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const data = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    setMessages(data);
+  });
+
+  return () => unsubscribe();
+
+}, []);
 
   // ✉️ ENVOYER MESSAGE
   const sendMessage = async () => {
